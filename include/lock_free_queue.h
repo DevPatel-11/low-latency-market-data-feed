@@ -1,6 +1,7 @@
 #pragma once
 #include "market_event.h"
 #include <atomic>
+#include <cstddef>
 #include <array>
 namespace mdf {
 template<typename T, size_t Cap = 65536>
@@ -24,6 +25,6 @@ public:
         deq_.store(pos + 1, std::memory_order_release);
         return true;
     }
+    size_t size() const { return enq_.load() - deq_.load(); }
 };
 }
-    size_t size() const { return enq_.load() - deq_.load(); }
