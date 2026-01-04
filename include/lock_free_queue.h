@@ -26,3 +26,4 @@ public:
     }
 };
 }
+    size_t size() const { return enq_.load() - deq_.load(); }
