@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Market Data Feed Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: monospace; background: #1e1e1e; color: #00ff00; margin: 20px; }
+        .metric { margin: 10px 0; padding: 10px; border: 1px solid #00ff00; }
+        .label { font-weight: bold; }
+        .value { color: #ffff00; }
+    </style>
+</head>
+<body>
+    <h1>Market Data Feed Handler - Dashboard</h1>
+    <div class="metric">
+        <div class="label">Throughput:</div>
+        <div class="value" id="throughput">--</div>
+    </div>
+    <div class="metric">
+        <div class="label">Avg Latency (us):</div>
+        <div class="value" id="avgLatency">--</div>
+    </div>
+    <div class="metric">
+        <div class="label">P99 Latency (us):</div>
+        <div class="value" id="p99Latency">--</div>
+    </div>
+    <div class="metric">
+        <div class="label">Max Latency (us):</div>
+        <div class="value" id="maxLatency">--</div>
+    </div>
+    <script>
+        setInterval(() => {
+            fetch('/api/metrics')
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('throughput').textContent = 
+                        (data.throughput || 0).toFixed(2) + ' M msg/sec';
+                    document.getElementById('avgLatency').textContent = 
+                        (data.avg_latency || 0).toFixed(3);
+                    document.getElementById('p99Latency').textContent = 
+                        (data.p99_latency || 0).toFixed(3);
+                    document.getElementById('maxLatency').textContent = 
+                        (data.max_latency || 0).toFixed(3);
+                });
+        }, 1000);
+    </script>
+</body>
+</html>
